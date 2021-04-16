@@ -4,12 +4,12 @@
 \alias{get_callejero}
 \title{Get Callejero}
 \usage{
-get_callejero(year, ver)
+get_callejero(year, version)
 }
 \arguments{
 \item{year}{string}
 
-\item{ver}{string}
+\item{version}{string}
 }
 \value{
 data.frame
@@ -25,5 +25,5 @@ For more information on the catalogue design, visit :
 https://www.ine.es/ss/Satellite?c=Page&p=1259952026632&pagename=ProductosYServicios\%2FPYSLayout&cid=1259952026632&L=1
 }
 \examples{
-get_callejero(year = "2018", ver = "01")
+get_callejero(year = "2018", version = "01")
 }
