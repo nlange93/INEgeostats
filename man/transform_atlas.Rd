@@ -2,16 +2,19 @@
 % Please edit documentation in R/Atlas.R
 \name{transform_atlas}
 \alias{transform_atlas}
-\title{Title}
+\title{Returns Atlas, an experimentaö data frame with Income Information from the spanish Tax Office}
 \usage{
 transform_atlas(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{data.frame}
 }
 \value{
-
+data.frame
 }
 \description{
-Title
+Returns Atlas, an experimentaö data frame with Income Information from the spanish Tax Office
+}
+\examples{
+
 }

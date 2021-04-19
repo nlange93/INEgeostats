@@ -15,6 +15,7 @@
 #'
 #' @return data.frame
 #' @export
+#' @importFrom magrittr %>%
 #'
 #'
 #' @examples
@@ -91,6 +92,7 @@ get_callejero <- function(year, version){
 #'
 #' @return data.frame
 #' @export
+#' @importFrom magrittr %>%
 #'
 #' @examples
 #' transform_callejero(get_callejero("2018", "01"))

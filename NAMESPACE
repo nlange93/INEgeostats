@@ -2,6 +2,9 @@
 
 export(get_atlas)
 export(get_callejero)
+export(get_cartography)
+export(get_padron)
 export(transform_atlas)
 export(transform_callejero)
+export(transform_padron)
 importFrom(magrittr,"%>%")

@@ -2,16 +2,19 @@
 % Please edit documentation in R/Atlas.R
 \name{get_atlas}
 \alias{get_atlas}
-\title{Title}
+\title{get_atlas}
 \usage{
-get_atlas(..., import = TRUE)
+get_atlas(import = TRUE)
 }
 \arguments{
-\item{...}{}
+\item{import}{TRUE if want to return data.frame}
 }
 \value{
-
+list
 }
 \description{
-Title
+get_atlas
+}
+\examples{
+get_atlas(import=FALSE)
 }
