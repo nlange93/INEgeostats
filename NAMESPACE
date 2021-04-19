@@ -2,4 +2,6 @@
 
 export(get_atlas)
 export(get_callejero)
+export(transform_atlas)
 export(transform_callejero)
+importFrom(magrittr,"%>%")
