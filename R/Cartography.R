@@ -27,7 +27,7 @@ get_cartography <- function(year, import = TRUE){
 
 
       carto <- sf::read_sf(list.files(path, pattern = ".shp", full.names = TRUE)) %>%
-        rename(SECC=CUSEC)
+        dplyr::rename(SECC=CUSEC)
 
       saveRDS(carto, file.path(path,"Cartography.RDS"))
     }
