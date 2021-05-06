@@ -34,11 +34,11 @@ get_atlas <- function(import = TRUE){
           if (stat$key[i] %in% c("Income_Distribution", "Income_Sources")){
             file <- readr::read_delim(paste0("data/INE/Atlas/", stat$key[i], ".csv"),
                                       "\t", escape_double = FALSE, trim_ws = TRUE,
-                                      skip = 7)
+                                      skip = 6)
           } else {
             file <- readr::read_delim(paste0("data/INE/Atlas/", stat$key[i], ".csv"),
                                       "\t", escape_double = FALSE, trim_ws = TRUE,
-                                      skip = 7)
+                                      skip = 6)
           }
           file <- data.frame(file)
           atlas[[stat$key[i]]] <- file
@@ -66,13 +66,14 @@ transform_atlas <- function(object){
   income_distribution <- object$Income_Distribution
   income_distribution[income_distribution == "."] <- NA
   income_distribution <- dplyr::mutate(income_distribution,
-                 ANRPP = dplyr::coalesce(X2017,X2016, X2015),
-                 ANRPH = dplyr::coalesce(X2017_1,X2016_1, X2015_1),
-                 MRPCU = dplyr::coalesce(X2017_2,X2016_2, X2015_2),
-                 ABRPP = dplyr::coalesce(X2017_3,X2016_3, X2015_3),
-                 ABRPH = dplyr::coalesce(X2017_4,X2016_4, X2015_4)) %>%
+                 ANRPP = dplyr::coalesce(X2018, X2017, X2016, X2015),
+                 ANRPH = dplyr::coalesce(X2018_1,  X2017_1, X2016_1, X2015_1),
+                 MRPCU = dplyr::coalesce(X2018_2,  X2017_2, X2016_2, X2015_2),
+                 MDRPCU = dplyr::coalesce(X2018_3, X2017_3, X2016_3, X2015_3),
+                 ABRPP = dplyr::coalesce(X2018_4,  X2017_4, X2016_4, X2015_4),
+                 ABRPH = dplyr::coalesce(X2018_5,  X2017_5, X2016_5, X2015_5)) %>%
 
-    dplyr::select(X1, ANRPP, ANRPH, MRPCU, ABRPP, ABRPH) %>%
+    dplyr::select(X1, ANRPP, ANRPH, MRPCU, MDRPCU, ABRPP, ABRPH) %>%
     tidyr::separate(X1, c("SECC"),
                     sep = " ", extra = "drop") %>%
     dplyr::mutate(type = dplyr::case_when(stringr::str_length(SECC) == 5 ~ "municipality",
@@ -88,6 +89,7 @@ transform_atlas <- function(object){
     dplyr::rename(ANRPPM=ANRPP,
            ANRPHM=ANRPH,
            MRPCUM=MRPCU,
+           MDRPCUM = MDRPCU,
            ABRPPM=ABRPP,
            ABRPHM=ABRPH)
   tmp_dis <- income_distribution %>%
@@ -96,6 +98,7 @@ transform_atlas <- function(object){
     dplyr::rename(ANRPPD=ANRPP,
            ANRPHD=ANRPH,
            MRPCUD=MRPCU,
+           MDRPCUD=MDRPCU,
            ABRPPD=ABRPP,
            ABRPHD=ABRPH)
 
@@ -110,22 +113,24 @@ transform_atlas <- function(object){
                                   locale = readr::locale(grouping_mark = ".")),
       MRPCU = readr::parse_number(dplyr::coalesce(MRPCU,MRPCUD,MRPCUM),
                                   locale = readr::locale(grouping_mark = ".")),
+      MDRPCU = readr::parse_number(dplyr::coalesce(MDRPCU,MDRPCUD,MDRPCUM),
+                                  locale = readr::locale(grouping_mark = ".")),
       ABRPP = readr::parse_number(dplyr::coalesce(ABRPP,ABRPPD,ABRPPM),
                                   locale = readr::locale(grouping_mark = ".")),
       ABRPH = readr::parse_number(dplyr::coalesce(ABRPH,ABRPHD,ABRPHM),
                                   locale = readr::locale(grouping_mark = "."))) %>%
-    dplyr::select(SECC, ANRPP, ANRPH, MRPCU, ABRPP, ABRPH)
+    dplyr::select(SECC, ANRPP, ANRPH, MRPCU, MDRPCU, ABRPP, ABRPH)
 
   #### income cources
 
   income_sources <- object$Income_Sources
   income_sources[income_sources == "."] <- NA
   income_sources <- dplyr::mutate(income_sources,
-                                  salaries = dplyr::coalesce(X2017,X2016, X2015),
-                                  pensions = dplyr::coalesce(X2017_1,X2016_1, X2015_1),
-                                  unemployment = dplyr::coalesce(X2017_2,X2016_2, X2015_2),
-                                  other_benefits = dplyr::coalesce(X2017_3,X2016_3, X2015_3),
-                                  other_incomes = dplyr::coalesce(X2017_4,X2016_4, X2015_4)) %>%
+                                  salaries = dplyr::coalesce(X2018, X2017,X2016, X2015),
+                                  pensions = dplyr::coalesce(X2018_1,X2017_1,X2016_1, X2015_1),
+                                  unemployment = dplyr::coalesce(X2018_2,X2017_2,X2016_2, X2015_2),
+                                  other_benefits = dplyr::coalesce(X2018_3, X2017_3,X2016_3, X2015_3),
+                                  other_incomes = dplyr::coalesce(X2018_4,X2017_4,X2016_4, X2015_4)) %>%
 
     dplyr::select(X1, salaries, pensions, unemployment, other_benefits, other_incomes) %>%
     tidyr::separate(X1, c("SECC"),
@@ -178,12 +183,12 @@ transform_atlas <- function(object){
   demographics <- object$Demographics
   demographics[demographics == "."] <- NA
   demographics <- dplyr::mutate(demographics,
-                                Atlas_age = dplyr::coalesce(X2017,X2016, X2015),
-                                Atlas_age_18 = dplyr::coalesce(X2017_1,X2016_1, X2015_1),
-                                Atlas_age_65 = dplyr::coalesce(X2017_2,X2016_2, X2015_2),
-                                Atlas_house_size = dplyr::coalesce(X2017_3,X2016_3, X2015_3),
-                                Atlas_uni_hh = dplyr::coalesce(X2017_4,X2016_4, X2015_4),
-                                Atlas_population = dplyr::coalesce(X2017_5,X2016_5, X2015_5)) %>%
+                                Atlas_age = dplyr::coalesce(X2018,X2017,X2016, X2015),
+                                Atlas_age_18 = dplyr::coalesce(X2018_1,X2017_1,X2016_1, X2015_1),
+                                Atlas_age_65 = dplyr::coalesce(X2018_2,X2017_2,X2016_2, X2015_2),
+                                Atlas_house_size = dplyr::coalesce(X2018_3,X2017_3,X2016_3, X2015_3),
+                                Atlas_uni_hh = dplyr::coalesce(X2018_4,X2017_4,X2016_4, X2015_4),
+                                Atlas_population = dplyr::coalesce(X2018_5,X2017_5,X2016_5, X2015_5)) %>%
 
     dplyr::select(X1, Atlas_population, Atlas_age, Atlas_age_18, Atlas_age_65, Atlas_house_size,Atlas_uni_hh) %>%
     tidyr::separate(X1, c("SECC"),
